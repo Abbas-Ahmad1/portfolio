@@ -889,7 +889,7 @@ section {
         position: fixed;
         top: 0;
         right: -100%;
-        width: 50%;
+        width: 350%;
         height: 100vh;
         background: var(--surface);
         flex-direction: column;
