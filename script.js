@@ -557,3 +557,31 @@ if (!('scrollBehavior' in document.documentElement.style)) {
     
     document.addEventListener('DOMContentLoaded', smoothScrollPolyfill);
 }
+
+// HTML Form data to GoogleSheet.
+const form = document.getElementById("contact-form");
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+
+  const data = {
+    name: form.name.value,
+    email: form.email.value,
+    subject: form.subject.value,
+    message: form.message.value
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbzHvFX_YZkYyTBVPwDYElUICug-CoF-GACYUC7WDEsdUnMn7GB2dkuwMYeot_tPjtglCg/exec", {
+    method: "POST",
+    body: JSON.stringify(data),
+  })
+  .then(res => res.text())
+  .then(msg => {
+    alert("✅ Message Sent Successfully!");
+    form.reset();
+  })
+  .catch(err => {
+    alert("❌ Error! Please try again.");
+    console.error(err);
+  });
+});
