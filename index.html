@@ -608,35 +608,41 @@
                     </div>
                     
                     <div class="contact-form">
-                        <form id="contact-form" class="form">
+                        <form id="contact-form" class="form" method="post" novalidate>
                             <div class="form-group">
                                 <label for="name" class="form-label">Your Name</label>
-                                <input type="text" id="name" name="name" class="form-input" required placeholder="Enter your name">
-                                <span class="form-error"></span>
+                                <input type="text" id="name" name="name" class="form-input" required maxlength="100" aria-describedby="name-error" placeholder="Enter your name">
+                                <span class="form-error" id="name-error"></span>
                             </div>
                             
                             <div class="form-group">
                                 <label for="email" class="form-label">Email Address</label>
-                                <input type="email" id="email" name="email" class="form-input" required placeholder="Enter your email">
-                                <span class="form-error"></span>
+                                <input type="email" id="email" name="email" class="form-input" required maxlength="254" aria-describedby="email-error" placeholder="Enter your email">
+                                <span class="form-error" id="email-error"></span>
                             </div>
                             
                             <div class="form-group">
                                 <label for="subject" class="form-label">Subject</label>
-                                <input type="text" id="subject" name="subject" class="form-input" required placeholder="Subject">
-                                <span class="form-error"></span>
+                                <input type="text" id="subject" name="subject" class="form-input" required maxlength="150" aria-describedby="subject-error" placeholder="Subject">
+                                <span class="form-error" id="subject-error"></span>
                             </div>
                             
                             <div class="form-group">
                                 <label for="message" class="form-label">Message</label>
-                                <textarea id="message" name="message" class="form-textarea" rows="5" required placeholder="Enter your Message"></textarea>
-                                <span class="form-error"></span>
+                                <textarea id="message" name="message" class="form-textarea" rows="5" required minlength="10" maxlength="5000" aria-describedby="message-error" placeholder="Enter your Message"></textarea>
+                                <span class="form-error" id="message-error"></span>
+                            </div>
+
+                            <div class="form-honeypot" aria-hidden="true">
+                                <label for="website">Leave this field empty</label>
+                                <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
                             </div>
                             
                             <button type="submit" class="btn btn-primary form-submit">
                                 <span class="btn-text">Send Message</span>
                                 <span class="btn-loading">Sending...</span>
                             </button>
+                            <p id="form-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></p>
                         </form>
                     </div>
                 </div>

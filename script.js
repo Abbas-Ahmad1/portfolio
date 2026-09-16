@@ -264,6 +264,7 @@ class PortfolioApp {
         const form = document.getElementById('contact-form');
         const inputs = form.querySelectorAll('.form-input, .form-textarea');
         const submitBtn = form.querySelector('.form-submit');
+        this.formSubmitting = false;
 
         // Real-time validation
         inputs.forEach(input => {
@@ -274,6 +275,7 @@ class PortfolioApp {
         // Form submission
         form.addEventListener('submit', (e) => {
             e.preventDefault();
+            if (this.formSubmitting) return;
             
             let isValid = true;
             inputs.forEach(input => {
@@ -282,9 +284,18 @@ class PortfolioApp {
                 }
             });
 
-            if (isValid) {
-                this.submitForm(form, submitBtn);
+            if (!isValid) {
+                this.setFormStatus('Please correct the highlighted fields.');
+                [...inputs].find(input => input.getAttribute('aria-invalid') === 'true')?.focus();
+                return;
             }
+
+            if (form.elements.website.value.trim()) {
+                this.showToast('Unable to send this message. Please check the form.', 'error');
+                return;
+            }
+
+            this.submitForm(form, submitBtn);
         });
     }
 
@@ -312,9 +323,14 @@ class PortfolioApp {
                 isValid = false;
             }
         }
+
+        if (isValid && field.maxLength >= 0 && value.length > field.maxLength) {
+            errorMessage = `${this.capitalizeFirst(fieldName)} is too long`;
+            isValid = false;
+        }
         
         // Minimum length validation
-        else if (fieldName === 'message' && value.length < 10) {
+        if (isValid && fieldName === 'message' && value.length < 10) {
             errorMessage = 'Message must be at least 10 characters long';
             isValid = false;
         }
@@ -322,6 +338,7 @@ class PortfolioApp {
         // Display error
         if (!isValid) {
             errorElement.textContent = errorMessage;
+            field.setAttribute('aria-invalid', 'true');
             field.style.borderColor = '#ef4444';
             
             // Animate error
@@ -339,42 +356,75 @@ class PortfolioApp {
     clearFieldError(field) {
         const errorElement = field.nextElementSibling;
         errorElement.textContent = '';
+        field.removeAttribute('aria-invalid');
         field.style.borderColor = '';
     }
 
-    submitForm(form, submitBtn) {
+    async submitForm(form, submitBtn) {
         const btnText = submitBtn.querySelector('.btn-text');
         const btnLoading = submitBtn.querySelector('.btn-loading');
-        const formData = new FormData(form);
+        const data = Object.fromEntries(
+            ['name', 'email', 'subject', 'message'].map(name => [name, form.elements[name].value.trim()])
+        );
+        data.website = form.elements.website.value.trim();
+        const controller = new AbortController();
+        let timeoutId;
         
         // Show loading state
+        this.formSubmitting = true;
         submitBtn.disabled = true;
         btnText.style.display = 'none';
         btnLoading.style.display = 'inline';
         submitBtn.classList.add('loading');
+        this.setFormStatus('Sending message…');
 
-        // Simulate form submission (replace with actual endpoint)
-        setTimeout(() => {
-            // Reset button state
+        let confirmed = false;
+        try {
+            const result = await Promise.race([
+                (async () => {
+                    const response = await fetch(CONTACT_FORM_ENDPOINT, {
+                        method: 'POST',
+                        body: JSON.stringify(data),
+                        signal: controller.signal
+                    });
+                    return { ok: response.ok, body: await response.text() };
+                })(),
+                new Promise((_, reject) => {
+                    timeoutId = setTimeout(() => {
+                        controller.abort();
+                        reject(new Error('Contact request timed out'));
+                    }, 15000);
+                })
+            ]);
+
+            if (!result.ok || result.body.trim() !== 'Success') {
+                throw new Error('Contact request was not acknowledged');
+            }
+            confirmed = true;
+        } catch (error) {
+            this.showToast("Your message may have been received, but we couldn't verify delivery. Please don't send it again immediately. You can use the email link if you need to follow up.", 'error');
+        } finally {
+            clearTimeout(timeoutId);
             submitBtn.disabled = false;
             btnText.style.display = 'inline';
             btnLoading.style.display = 'none';
             submitBtn.classList.remove('loading');
-            
-            // Show success message
-            this.showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
-            
-            // Reset form
+            this.formSubmitting = false;
+        }
+
+        if (confirmed) {
             form.reset();
-            
-            // Animate success
-            anime({
-                targets: form,
-                scale: [1, 1.02, 1],
-                duration: 600,
-                easing: 'easeInOutQuad'
-            });
-        }, 2000);
+            form.querySelectorAll('.form-input, .form-textarea').forEach(input => this.clearFieldError(input));
+            this.showToast('Message sent successfully.', 'success');
+            if (!this.reducedMotion && typeof anime === 'function') {
+                anime({
+                    targets: form,
+                    scale: [1, 1.02, 1],
+                    duration: 600,
+                    easing: 'easeInOutQuad'
+                });
+            }
+        }
     }
 
     capitalizeFirst(str) {
@@ -382,16 +432,22 @@ class PortfolioApp {
     }
 
     // Toast Notifications
+    setFormStatus(message) {
+        document.getElementById('form-status').textContent = message;
+    }
+
     showToast(message, type = 'success') {
         const toast = document.getElementById('toast');
         const toastMessage = toast.querySelector('.toast-message');
         
+        this.setFormStatus(message);
         toastMessage.textContent = message;
         toast.className = `toast ${type}`;
         toast.classList.add('show');
         
         // Auto hide after 5 seconds
-        setTimeout(() => {
+        clearTimeout(this.toastTimer);
+        this.toastTimer = setTimeout(() => {
             toast.classList.remove('show');
         }, 5000);
     }
@@ -587,30 +643,5 @@ if (!('scrollBehavior' in document.documentElement.style)) {
     document.addEventListener('DOMContentLoaded', smoothScrollPolyfill);
 }
 
-// HTML Form data to GoogleSheet.
-const form = document.getElementById("contact-form");
-
-form.addEventListener("submit", e => {
-  e.preventDefault();
-
-  const data = {
-    name: form.name.value,
-    email: form.email.value,
-    subject: form.subject.value,
-    message: form.message.value
-  };
-
-  fetch("https://script.google.com/macros/s/AKfycbzHvFX_YZkYyTBVPwDYElUICug-CoF-GACYUC7WDEsdUnMn7GB2dkuwMYeot_tPjtglCg/exec", {
-    method: "POST",
-    body: JSON.stringify(data),
-  })
-  .then(res => res.text())
-  .then(msg => {
-    alert("✅ Message Sent Successfully!");
-    form.reset();
-  })
-  .catch(err => {
-    alert("❌ Error! Please try again.");
-    console.error(err);
-  });
-});
+// Existing Google Apps Script web-app deployment.
+const CONTACT_FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbzHvFX_YZkYyTBVPwDYElUICug-CoF-GACYUC7WDEsdUnMn7GB2dkuwMYeot_tPjtglCg/exec";
