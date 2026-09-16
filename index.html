@@ -6,28 +6,24 @@
     <meta name="description" content="Abbas Ahmad - Computer Science Student Portfolio. Showcasing web development, machine learning, and software engineering projects.">
     <meta name="keywords" content="computer science, web development, portfolio, Abbas Ahmad, programming, software engineering">
     <meta name="author" content="Abbas Ahmad">
-    <title>Abbas Ahmad-Portfolio</title>
-    <link rel="icon" type="image/x-icon" href="/resources/favicon/favicon-32x32.png">
+    <title>Abbas Ahmad | Computer Science Student & Developer</title>
+    <link rel="icon" type="image/png" href="resources/favicon/favicon-32x32.png">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
-    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.min.js"></script>
-    
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <div class="nav-logo">
-                <span class="logo-text">Abbas Ahmad</span>
-            </div>
+            <a class="nav-logo logo-text" href="#home" aria-label="Abbas Ahmad — return to home">Abbas Ahmad</a>
             
-            <div class="nav-menu" id="nav-menu">
+            <div class="nav-menu" id="nav-menu" aria-hidden="false">
                 <ul class="nav-list">
                     <li class="nav-item">
                         <a href="#home" class="nav-link active" data-section="home">Home</a>
@@ -48,11 +44,11 @@
             </div>
             
             <div class="nav-controls">
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">
                     <span class="theme-icon">🌙</span>
                 </button>
                 
-                <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <button class="hamburger" id="hamburger" type="button" aria-label="Open navigation menu" aria-controls="nav-menu" aria-expanded="false">
                     <span class="bar"></span>
                     <span class="bar"></span>
                     <span class="bar"></span>
@@ -62,7 +58,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main>
+    <main id="main-content" tabindex="-1">
         <!-- Hero Section -->
         <section id="home" class="hero">
             <div class="hero-background">
@@ -587,7 +583,7 @@
                         <div class="contact-social">
                             <h4>Connect with me:</h4>
                             <div class="social-links">
-                                <a href="http://github.com/abbas-ahmad1" target="_blank" rel="noopener noreferrer" class="social-link">
+                                <a href="http://github.com/abbas-ahmad1" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
                                     <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                                     </svg>
@@ -597,12 +593,12 @@
                             <path d="M17.4145 14.3822C17.1173 14.2334 15.6564 13.5147 15.384 13.4153C15.1117 13.3162 14.9136 13.2667 14.7154 13.5641C14.5173 13.8615 13.9478 14.5309 13.7745 14.7293C13.6012 14.9275 13.4278 14.9524 13.1307 14.8036C12.8335 14.6549 11.876 14.3411 10.7411 13.3287C9.85769 12.5407 9.26129 11.5677 9.08799 11.2702C8.91461 10.9727 9.06943 10.8119 9.21822 10.6637C9.35195 10.5306 9.51546 10.3166 9.66399 10.1431C9.81257 9.96961 9.86209 9.84558 9.96114 9.6474C10.0602 9.44899 10.0107 9.27553 9.93634 9.12682C9.86209 8.97808 9.26779 7.51537 9.02016 6.92034C8.77895 6.34096 8.53397 6.41944 8.35157 6.41024C8.17844 6.40165 7.98013 6.39981 7.78207 6.39981C7.58397 6.39981 7.26201 6.47418 6.98958 6.77159C6.71727 7.06908 5.94959 7.78806 5.94959 9.25059C5.94959 10.7133 7.01434 12.1263 7.16296 12.3246C7.31158 12.523 9.25829 15.5244 12.2393 16.8116C12.9482 17.1178 13.5017 17.3006 13.9333 17.4375C14.6451 17.6637 15.2929 17.6318 15.805 17.5552C16.3759 17.47 17.5631 16.8364 17.8107 16.1424C18.0583 15.4481 18.0583 14.8532 17.984 14.7293C17.9097 14.6053 17.7116 14.5309 17.4145 14.3822ZM11.9925 21.7853H11.9886C10.2148 21.7846 8.47517 21.3081 6.9575 20.4075L6.59654 20.1932L2.85541 21.1746L3.85395 17.527L3.61899 17.153C2.62951 15.5792 2.10688 13.7603 2.10765 11.8925C2.10983 6.44257 6.54415 2.0086 11.9965 2.0086C14.6367 2.00954 17.1185 3.03905 18.9849 4.9075C20.8511 6.77582 21.8782 9.25932 21.8772 11.9005C21.875 17.3509 17.4408 21.7853 11.9925 21.7853ZM20.4052 3.48773C18.1599 1.2398 15.1739 0.00128304 11.9925 0C5.43736 0 0.102301 5.33471 0.0996495 11.8918C0.0987941 13.9879 0.646396 16.0337 1.68711 17.8373L0 24L6.30443 22.3462C8.04154 23.2937 9.99728 23.7931 11.9877 23.7937H11.9926C18.547 23.7937 23.8825 18.4585 23.8852 11.9013C23.8864 8.72361 22.6505 5.73566 20.4052 3.48777"/>
                         </svg>
                     </a><br>
-                            <a href="https://www.linkedin.com/in/abbas-ahmad-6b84b3257?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" class="social-link">
+                            <a href="https://www.linkedin.com/in/abbas-ahmad-6b84b3257?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
                                     <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                                     </svg>
                                 </a><br>
-                                <a href="https://x.com/i_abbas10?t=msjcwcnHJ59wA6bkGiQ4cg&s=09" target="_blank" rel="noopener noreferrer" class="social-link">
+                                <a href="https://x.com/i_abbas10?t=msjcwcnHJ59wA6bkGiQ4cg&s=09" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X">
                                     <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                                     </svg>
